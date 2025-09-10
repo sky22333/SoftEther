@@ -1,4 +1,5 @@
 tests
+.github
 .git
-.travis.yml
 README.md
+docker-compose.yml
