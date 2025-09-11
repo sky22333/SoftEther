@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/sky22333/softether
+    build: .
     volumes:
       - ./vpn_server.config:/usr/vpnserver/vpn_server.config
     cap_add:
