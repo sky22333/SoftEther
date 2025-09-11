@@ -1,4 +1,4 @@
-name: ghcr镜像构建
+name: ghcr镜像构建-最新版本
 on:
   workflow_dispatch:
     inputs:
