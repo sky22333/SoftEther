@@ -1,19 +1,20 @@
-FROM alpine:3.20 as prep
+FROM alpine AS prep
 
 ENV BUILD_VERSION=4.44-9807-rtm
 
-RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VERSION}.tar.gz \
+RUN apk add --no-cache wget \
+    && wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VERSION}.tar.gz \
     && mkdir -p /usr/local/src \
     && tar -x -C /usr/local/src/ -f v${BUILD_VERSION}.tar.gz \
     && rm v${BUILD_VERSION}.tar.gz
     
-FROM alpine:3.20 as build
+FROM alpine AS build
 
 COPY --from=prep /usr/local/src /usr/local/src
 
 ENV LANG=en_US.UTF-8
 
-RUN apk add -U build-base ncurses-dev openssl-dev readline-dev zip zlib-dev \
+RUN apk add --no-cache linux-headers libpcap-dev build-base ncurses-dev openssl-dev readline-dev zip zlib-dev \
     && cd /usr/local/src/SoftEtherVPN_Stable-* \
     && ./configure \
     && make \
@@ -21,7 +22,7 @@ RUN apk add -U build-base ncurses-dev openssl-dev readline-dev zip zlib-dev \
     && touch /usr/vpnserver/vpn_server.config \
     && zip -r9 /artifacts.zip /usr/vpn* /usr/bin/vpn*
     
-FROM alpine:3.20
+FROM alpine
 
 COPY --from=build /artifacts.zip /
 
@@ -29,7 +30,7 @@ COPY copyables /
 
 ENV LANG=en_US.UTF-8
 
-RUN apk add -U --no-cache bash iptables openssl-dev \
+RUN apk add --no-cache bash iptables openssl-dev \
     && chmod +x /entrypoint.sh /gencert.sh \
     && unzip -o /artifacts.zip -d / \
     && rm /artifacts.zip \
