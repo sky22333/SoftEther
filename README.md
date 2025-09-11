@@ -1,14 +1,10 @@
 ```
 services:
   softether:
-    image: ghcr.nju.edu.cn/ghcr.io/sky22333/softether
+    image: ghcr.io/sky22333/softether
     container_name: l2tp
     restart: always
-    privileged: true
-    ports:
-      - "500:500/udp"
-      - "4500:4500/udp"
-      - "1701:1701/udp"
+    network_mode: host
     environment:
       - PSK=admin123
       - USERS=user1:password1;user2:password2;user3:password3
