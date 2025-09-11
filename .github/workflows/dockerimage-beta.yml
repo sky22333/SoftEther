@@ -38,6 +38,6 @@ jobs:
             --platform linux/amd64,linux/arm64 \
             --tag ghcr.io/${{ github.repository }}:${{ env.VERSION }} \
             --build-arg VERSION=${{ env.VERSION }} \
-            ./Dockerfile.latest
+            Dockerfile.latest
         env:
           GHCR_PUBLIC: true
